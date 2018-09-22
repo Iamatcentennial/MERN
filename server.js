@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyparser = require('body-parser');
 
 const users = require('./routes/api/users');
 const posts = require('./routes/api/posts');
@@ -17,6 +18,13 @@ mongoose.connect(db)
     .catch((err) => {
         console.log(err);
     })
+// support parsing of application/json type post data
+app.use(bodyparser.json());
+
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyparser.urlencoded({
+    extended: true
+}));
 
 // Routes
 app.use('/api/posts', posts);
