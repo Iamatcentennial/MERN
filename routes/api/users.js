@@ -14,7 +14,7 @@ router.get('/test', (req, res) => {
 
 // @route GET api/users/test
 // @ desc Tests users route
-// @ access private
+// @ access public
 router.post('/register', (req, res) => {
     User.findOne({
             email: req.body.email
@@ -58,6 +58,33 @@ router.post('/register', (req, res) => {
             }
         });
 
+});
+
+router.post('/login', (req, res) => {
+    User.findOne({
+            email: req.body.email
+        })
+        .then((user) => {
+            if (!user) {
+                res.status(404).json({
+                    email: 'User with the given email does not exist'
+                });
+            }
+            bcrypt.compare(req.body.password, user.password)
+                .then((isMatch) => {
+                    if (isMatch) {
+                        res.json({
+                            password: 'login sucess'
+                        });
+                    } else {
+                        res.json({
+                            password: 'password incorrect'
+                        });
+                    }
+                });
+
+
+        })
 });
 
 
